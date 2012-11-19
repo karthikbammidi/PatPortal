@@ -1,0 +1,137 @@
+﻿@{
+    Layout = "~/Areas/Account/Views/Shared/_PatPortalLayout.cshtml";
+    ViewBag.Title = "PatPortal-Register";
+}
+<script type="text/javascript">
+    function validateRegisterform() {
+        $('#loadingTD').show();
+        $('#btnSignin').attr('disabled', 'disabled');
+        if ($('#txtEmail').val() == '' || $('#txtEmail').val() == 'Enter your email here') {
+            $('#lblUserError').css('display', 'block');
+            $('#lblUserError').text('Please enter your email.');
+            $('#loadingTD').hide();
+            $('#txtEmail').val('');
+            $('#btnSignin').removeAttr('disabled');
+            return false;
+        }
+
+        if (!/^\w+([\.-]?\w+)*@@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test($('#txtEmail').val())) {
+            $('#lblUserError').css('display', 'block');
+            $('#lblUserError').text('Invalid Email Address.');
+            $('#loadingTD').hide();
+            $('#txtEmail').val('');
+            $('#btnSignin').removeAttr('disabled');
+            return false;
+        }
+
+        var email = $('#txtEmail').val();
+        $('#lblUserError').text('');
+        $.ajax({
+            url: '/Account/ValidUser',
+            type: 'POST',
+            data: { "email": email,"clinicid":'@Request.QueryString["ClinicId"]' },
+            cache: 'false',
+            success: function (data) {
+                if (data != 'notfound' && data != 'exists' && data.error == null) {
+                    var Email = data.Email;
+                    var PatRecno = data.RecNo;
+                    var PatID = data.PatId;
+                    var password = data.Password;
+                    $.ajax({
+                        url: '/Account/Register',
+                        type: 'POST',
+                        data: { email: Email, patid: PatID,clinicid:'@Request.QueryString["ClinicId"]' },
+                        cache: false,
+                        success: function (emailData) {
+                            if (emailData.result == 'true') {
+                                $('#lblUserError').css('display', 'block');
+                                $('#lblUserError').text('We just sent you an email. Please check your email in few minutes and follow the instructions to set a new password or reset your old password');
+                                $('#loadingTD').hide();
+                                $('#btnSignin').removeAttr('disabled');
+                                $('#txtEmail').val('');
+                            }
+                            else if (emailData.result == "false") {
+                                $('#lblUserError').css('display', 'block');
+                                $('#lblUserError').text('Mail send failed. Check your smtp settings.');
+                                $('#loadingTD').hide();
+                                $('#btnSignin').removeAttr('disabled');
+                                $('#txtEmail').val('');
+                            }
+                            else if (emailData.result != "true" || emailData.result != "false") {
+                                $('#lblUserError').css('display', 'block');
+                                $('#lblUserError').text(emailData.result);
+                                $('#loadingTD').hide();
+                                $('#btnSignin').removeAttr('disabled');
+                                $('#txtEmail').val('');
+                            }
+                            else {
+                            }
+                        },
+
+                        Error: function () {
+                            $('#lblUserError').css('display', 'block');
+                            $('#lblUserError').text('Sending Email Failed.');
+                            $('#loadingTD').hide();
+                            $('#btnSignin').removeAttr('disabled');
+                            $('#txtEmail').val('');
+                        }
+                    });
+                }
+                else {
+                    $('#lblUserError').css('display', 'block');
+                    if (data == 'notfound') {
+                        $('#lblUserError').text('Your email id is not registered with this clinic.');
+                    }
+                    else if(data.error!=null)
+                    {
+                        $('#lblUserError').text(data.error);
+                    }
+                    else {
+                        $('#lblUserError').text('This user already existed.');
+                    }
+                    $('#loadingTD').hide();
+                    $('#btnSignin').removeAttr('disabled');
+                    $('#txtEmail').val('');
+                }
+            },
+            Error: function () {
+                $('#lblUserError').css('display', 'block');
+                $('#lblUserError').text('An Error Occurred.');
+                $('#loadingTD').hide();
+                $('#btnSignin').removeAttr('disabled');
+                $('#txtEmail').val('');
+            }
+        });
+
+    }
+</script>
+<div>
+    <label id="lblUserError" style="color: #C85305; display: none; padding-top: 6px;
+        padding-bottom: 6px;">
+    </label>
+    <input type="email" id="txtEmail" name="txtEmail" maxlength="113" value="Enter your email here"
+        onfocus="if(value=='Enter your email here') value = ''" onblur="if(value=='') value = 'Enter your email here'">
+</div>
+<div>
+    <table>
+        <tr>
+            <td>
+                <input type="button" id="btnSignin" name="btnSignin" value="Register" class="default XLargePaddingRight"
+                    onclick="return validateRegisterform();" />
+            </td>
+            <td style="padding-left: 5px; padding-top: 27px; display: none;" id="loadingTD">
+                <table>
+                    <tr>
+                        <td>
+                            <img src="../../Content/images/loading_ajax.gif" />
+                        </td>
+                        <td>
+                            Loading...
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+ 

@@ -1,0 +1,228 @@
+﻿
+@using Kendo.Mvc.UI;
+@using Kendo.Mvc.Extensions;
+@using Kendo.Mvc.Resources;
+@using Messages.Entities;
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+    <script src="@Url.Content("../../Content/js/jquery-1.7.1.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("../../Content/js/kendo.all.min.js")" type="text/javascript"></script>
+    <link href="@Url.Content("../../Content/styles/kendo.common.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("../../Content/styles/kendo.default.min.css")" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+
+    </style>
+    <script type="text/javascript">
+        $(document).ready(function () {
+           @if(((List<Patient>)ViewBag.Patients).Count>0)
+          {
+           <text>$('#tblPatient').css('display', 'block');
+            $('#tblPatError').css('display', 'none');
+            </text>
+          }
+            else
+            {
+             <text>$('#tblPatient').css('display', 'none');
+            $('#tblPatError').css('display', 'block');
+            </text>
+            }
+
+            $('#ddlPatients').change(function () {
+                var patid = $('#ddlPatients').val();
+                $.ajax({
+                    url: '/Account/UpdatePatient',
+                    type: 'POST',
+                    data: { patid: patid },
+                    cache: false,
+                    success: function (response) {
+                        if (response.result != 'failed' || response.result != 'unauthorized') {
+                            $('#ankUsername').text('Welcome ' + response.result);
+                            $('#ankUsername').append("<img src='/Content/images/bluemanm.png' alt='UserInfo' height='8' class='UserInfo_img' style='visibility: hidden' />");
+                        }
+                    },
+                    error: function () { alert('Error'); }
+                });
+            });
+
+            $('#ddlClinics').change(function () {
+                var clinicid = $('#ddlClinics').val();
+                $('#ClinicName').text($('#ddlClinics option:selected').text());
+                $.ajax({
+                    url: '/Account/UpdateClinic',
+                    type: 'Post',
+                    data: { clinicid: clinicid, email: '@User.Identity.Name' },
+                cache: false,
+                success: function (response) {
+                    if (response.result == 'success') {
+                        $.ajax({
+                            url: '/Messages/GetPatient',
+                            type: 'Post',
+                            data: { email: '@User.Identity.Name' ,clinicid:clinicid},
+                            cache: false,
+                            success: function (result) {
+                                if (result != 'error' && result.resp.length > 0) {
+                                    var c = 0;
+                                    var patname = '';
+                                    var items = "";
+                                    $.each(result.resp, function (k, v) {
+                                        c = c + 1;
+                                        if (c == 1) {
+                                            patname = v.PatName
+                                        }
+                                        if (v.PatId == result.patid) {
+                                            items += "<option value=\"" + v.PatId + "\" selected=\"selected\" >" + v.PatName + "</option>";
+                                        }
+                                        else {
+                                            items += "<option value=\"" + v.PatId + "\">" + v.PatName + "</option>";
+                                        }
+                                    });
+                                    $("#ddlPatients").html(items);
+                                    //$("select#ddlPatients")[0].selectedIndex = 0;
+                                    $('#tblPatient').css('display', 'block');
+                                    $('#tblPatError').css('display', 'none');
+
+                                    $('#ankUsername').text('Welcome ' + patname);
+                                    $('#ankUsername').append("<img src='/Content/images/bluemanm.png' alt='UserInfo' height='8' class='UserInfo_img' style='visibility: hidden' />");
+
+                                    $.ajax({
+                                        url: '/Messages/PatientMessages',
+                                        type: 'GET',
+                                        cache: false,
+                                        contentType: "text/html; charset=utf-8",
+                                        dataType: "html",
+                                        success: function (data) {
+                                            if (data.indexOf('html') > 0) {
+                                                $('div.CenterPane div#PatPortalContent').html('');
+                                                $('div.CenterPane div#PatPortalContent').html(data);
+                                                //$("html, body").animate({ scrollTop: 0 }, "slow");
+
+                                                $('#ankUsername').text('Welcome ' + $('#ddlPatients option:selected').text());
+                                                $('#ankUsername').append("<img src='/Content/images/bluemanm.png' alt='UserInfo' height='8' class='UserInfo_img' style='visibility: hidden' />");
+                                            }
+                                            else {
+                                                var d = eval('(' + data + ')');
+                                                if (d.error == 'notexist') {
+                                                    $('div.TopBlue div#patdetailshome').html('');
+                                                    $('div.TopBlue div#patdetailshome').html('Patient doesnot exist in clinic database');
+                                                }
+                                                else if (d.error == 'unauthorized') {
+                                                    window.location.href = "/Account/Login";
+                                                }
+                                                else {
+                                                    $('div.CenterPane div#PatPortalContent').html('');
+                                                    $('div.CenterPane div#PatPortalContent').html(d.error);
+                                                }
+
+                                            }
+                                        }
+                                    });
+                                }
+
+                            }
+                        });
+                    }
+                    else {
+                        if (response.result == "failed") {
+                            $('#tblPatient').css('display', 'none');
+                            $('#tblPatError').css('display', 'block');
+                            $('#ankUsername').text('Welcome UNKNOWN');
+                            $('#ankUsername').append("<img src='/Content/images/bluemanm.png' alt='UserInfo' height='8' class='UserInfo_img' style='visibility: hidden' />");
+                            $('div.CenterPane div#PatPortalContent').html('');
+                        }
+                        else {
+                            $('#tblPatient').css('display', 'none');
+                            $('#tblPatError').css('display', 'block');
+                            $('#spnPatError').html('');
+                            $('#spnPatError').html(response.result);
+                        }
+                    }
+                }
+            });
+
+
+            });
+        });
+    </script>
+</head>
+<body>
+    
+    <div id="dvIsPatientExist" style="visibility:hidden">
+    @if (ViewBag.IsPatientExists != null)
+    {
+        @ViewBag.IsPatientExists
+    }
+    else
+    {
+        @:exist
+    }
+    </div>
+    <table align="center" width="100%" cellspacing="4" cellpadding="5" style="padding-left: 16%;
+        margin-top: -30px; background-color: #0072C6">
+        <tr>
+            <td colspan="2" align="center">
+                <table cellspacing="3" cellpadding="4" style="padding-left: 240px" id="tblDetails">
+                    <tr>
+                        <td style="font-family: Segoe UI, Arial, Verdana, Tahoma; font-size: 15px; color: White">
+                            Clinic:&nbsp;&nbsp;
+                        </td>
+                        <td id="tblClinics">
+                            @if (((List<Account.Entities.Clinic>)ViewBag.lstClinic).Count > 0)
+                            {
+                           @* @(
+ Html.Kendo().DropDownList().Name("ddlClinics").Events(e => e.Change("ChangeClinic")).BindTo(new SelectList((List<Account.Entities.Clinic>)ViewBag.lstClinic, "ClinicID", "ClinicName", ViewBag.activeclinicid))
+                            )*@
+                                
+                                <select id="ddlClinics" style="height:25px;font-family: Helvetica,Arial,sans-serif;" data-role="dropdownlist">
+                                    @foreach (var clinic in (List<Account.Entities.Clinic>)ViewBag.lstClinic)
+                                    {
+                                        <option value="@clinic.ClinicId" @if(Convert.ToString(ViewBag.activeclinicid)==clinic.ClinicId){<text>selected="selected"</text>} >@clinic.ClinicName</option>
+                                    }
+                                </select>
+                            }
+                            else
+                            {
+                                <span style="color:white;font-weight:bold">No clinic available</span>
+                            }
+                        </td>
+                        <td>
+                            &nbsp;&nbsp;
+                        </td>
+                        <td>
+                         <table id="tblPatient" style="display:none"><tr>
+                        <td style="font-family: Segoe UI, Arial, Verdana, Tahoma; font-size: 15px; color: White">
+                            Patient:&nbsp;&nbsp;
+                        </td>
+                        <td>
+                           @* @(
+ Html.Kendo().DropDownList().Name("ddlPatients").Events(e => e.Change("ChangePatient")).BindTo(new SelectList((List<Patient>)ViewBag.Patients, "PatId", "PatName", ViewBag.activepatientid))
+                            )*@
+                            <select id="ddlPatients" id="mainselection" style="height:25px;width:120px;font-family: Helvetica,Arial,sans-serif;">
+                                    @foreach (var patient in (List<Patient>)ViewBag.Patients)
+                                    {
+                                        <option value="@patient.PatId" @if (Convert.ToString(ViewBag.activepatientid) == patient.PatId)
+                                                                         {<text>selected="selected"</text>} >@patient.PatName</option>
+                                    }
+                                </select>
+                        </td>
+                        @if (ViewBag.nextappointment != null)
+                        {
+                        <td style="padding-top:4px;">
+
+                            <span style="color:white;font-weight:bold;padding-left:20px;">Next Appointment: @ViewBag.nextappointment</span>
+                        </td>
+                        }</tr></table>
+                                <table id="tblPatError" style="display:none"><tr>
+                                <td>
+                                    <span style="color:white;font-weight:bold" id="spnPatError">Your email no longer associated with selected clinic</span>
+                                </td></tr></table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

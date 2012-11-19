@@ -1,0 +1,189 @@
+﻿
+        #vertical
+        {
+            height: 380px;
+        }
+        #verticalSent
+        {
+            height: 380px;
+        }
+        #verticalDelete
+        {
+            height: 380px;
+        }
+        #middle-pane
+        {
+            background-color: rgba(60, 70, 80, 0.10);
+        }
+        #bottom-pane
+        {
+            background-color: rgba(60, 70, 80, 0.15);
+        }
+        #left-pane
+        {
+            background-color: rgba(60, 70, 80, 0.05);
+        }
+        #center-pane
+        {
+            background-color: rgba(60, 70, 80, 0.05);
+        }
+        #right-pane
+        {
+            background-color: rgba(60, 70, 80, 0.05);
+        }
+        .pane-content
+        {
+            padding: 0 10px;
+        }
+        
+        .k-state-selected
+        {
+            cursor: pointer;
+        }
+        .k-editor .k-editable-area
+        {
+            height: 80px;
+        }
+        
+        div.k-tabstrip ul.k-tabstrip-items
+        {
+            padding-left: 3px;
+            padding: .4em .3em 0 .2em;
+        }
+        
+        .k-content
+        {
+            border: 1px solid #0072C6;
+        }
+
+td.k-editable-area {
+    height:200px;
+}
+
+.k-scrollable {
+overflow-x:hidden;
+}
+        
+        .k-state-active
+        {
+            border: 1px solid #0072C6;
+        }
+        
+        ul.k-tabstrip-items li.k-state-hover
+        {
+            background-color: #338ed1;
+            background-image: none;
+        }
+        
+        ul.k-tabstrip-items li.k-state-active
+        {
+            background-color: White;
+        }
+        
+        ul.k-tabstrip-items li.k-state-default
+        {
+            background-image: none;
+        }
+        
+        ul.k-tabstrip-items li.k-item
+        {
+            background-color: #0072C6;
+        }
+        
+        ul.k-tabstrip-items li a.k-link
+        {
+            font-weight: bold;
+            color: White;
+        }
+        
+        ul.k-tabstrip-items li.k-state-active
+        {
+            border-left: 1px solid #0072C6;
+            border-right: 1px solid #0072C6;
+            border-top: 1px solid #0072C6;
+            background-color: White;
+        }
+        
+        ul.k-tabstrip-items li.k-state-active a.k-link
+        {
+            color: #0072C6;
+        }
+        
+        div#tabstrip-1
+        {
+            border: 1px solid #0072C6;
+        }
+        
+        div#tabstrip-2
+        {
+            border: 1px solid #0072C6;
+        }
+        
+        div#tabstrip-3
+        {
+            border: 1px solid #0072C6;
+        }
+        
+        :root input[type=button].default
+        {
+            margin: 7px 18px 25px 0 !important;
+        }
+        
+        .k-tabstrip
+        {
+            background-color: transparent;
+        }
+
+.ui-dialog-buttonset {
+ padding-right:120px;
+}
+
+span.ui-button-text {
+    line-height:10px;
+    width:40px;
+}
+        
+        div.k-overlay
+        {
+            z-index: -2;
+            background-color: transparent;
+            opacity: 1;
+        }
+        
+        #customLoadingPanel
+        {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 10001;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            filter: alpha(opacity=50);
+            opacity: .5;
+        }
+        .CenterPane td label
+        {
+            white-space: normal;
+        }
+        
+        div#vertical div#top-pane
+        {
+            width: 1240px;
+        }
+        
+        .someBoldClass
+        {
+            font-weight: bold;
+        }
+        
+        div.k-grid a:hover
+        {
+            font-size: 13px;
+        }
+        
+        div.k-grid a:active
+        {
+            font-size: 13px;
+        }
+        

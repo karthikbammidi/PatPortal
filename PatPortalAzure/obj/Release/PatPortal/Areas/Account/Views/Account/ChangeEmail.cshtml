@@ -1,0 +1,127 @@
+﻿<script type="text/javascript">
+
+    function validateChangeEmailform() {
+
+        if ($('#txtOldEmail').val() == '' || $('#txtOldEmail').val() == 'Enter your old email here') {
+            $('#lblUserError').css('display', 'block');
+            $('#lblUserError').text('Please enter your old email.');
+            $('#txtOldEmail').val('');
+            return false;
+        }
+
+        if (!/^\w+([\.-]?\w+)*@@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test($('#txtOldEmail').val())) {
+            $('#lblUserError').css('display', 'block');
+            $('#lblUserError').text('Invalid Email Address.');
+            $('#txtOldEmail').val('');
+            return false;
+        }
+
+        if ($('#txtNewEmail').val() == '' || $('#txtNewEmail').val() == 'Enter your new email here') {
+            $('#lblUserError').css('display', 'block');
+            $('#lblUserError').text('Please enter your new email.');
+            $('#txtNewEmail').val('');
+            return false;
+        }
+
+        if (!/^\w+([\.-]?\w+)*@@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test($('#txtNewEmail').val())) {
+            $('#lblUserError').css('display', 'block');
+            $('#lblUserError').text('Invalid Email Address.');
+            $('#txtNewEmail').val('');
+            return false;
+        }
+
+        if ($('#txtReEnterEmail').val() == '' || $('#txtReEnterEmail').val() == 'Re-enter your new email here') {
+            $('#lblUserError').css('display', 'block');
+            $('#lblUserError').text('Please re-enter your new email.');
+            $('#txtReEnterEmail').val('');
+            return false;
+        }
+
+        if (!/^\w+([\.-]?\w+)*@@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test($('#txtReEnterEmail').val())) {
+            $('#lblUserError').css('display', 'block');
+            $('#lblUserError').text('Invalid Email Address.');
+            $('#txtReEnterEmail').val('');
+            return false;
+        }
+
+        if ($('#txtNewEmail').val() != $('#txtReEnterEmail').val()) {
+            $('#lblUserError').css('display', 'block');
+            $('#lblUserError').text('Email doesnt match.');
+            return false;
+        }
+
+        var oldemail = $('#txtOldEmail').val();
+        var newemail = $('#txtNewEmail').val();
+        var confirmemail = $('#txtReEnterEmail').val();
+
+        $.ajax({
+            url: '/Account/ChangeEmail',
+            type: 'post',
+            data: { "oldemail": oldemail, "newemail": newemail, "confirmemail": confirmemail },
+            cache: false,
+            success: function (data) {
+                if (data.error == 'success') {
+                    $('#lblUserError').text('Email updated successfully');
+                }
+                else if (data.error == 'invalidemail') {
+                    $('#lblUserError').text('Invalid Email. Try again');
+                }
+                else if (data.error == 'unauthorized') { window.location.href = '/Account/Login'; }
+                else {
+                    $('#lblUserError').text(data.error);
+                }
+            }
+        });
+        return true;
+    }
+
+</script>
+<table align="center" cellspacing="5" cellpadding="5" style="width: 500px;margin-left:26%">
+    <tr style="width: 100%;">
+        <td style="width: 100%; border-right: 0px solid black; vertical-align: top;">
+                <table>
+                    <tr>
+                    <td colspan="2" align="center">
+                        <label id="lblUserError" style="color: #C85305; padding-top: 6px; padding-bottom: 6px;">
+                        </label>
+                    </td>
+                </tr>
+                    <tr>
+                        <td>
+                            Old Email
+                        </td>
+                        <td>
+                                <input type="email" id="txtOldEmail" name="txtOldEmail" maxlength="113" value="Enter your old email here"
+                                    onfocus="if(value=='Enter your old email here') value = ''" onblur="if(value=='') value = 'Enter your old email here'">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            New Email
+                        </td>
+                        <td>
+                                <input type="email" id="txtNewEmail" name="txtNewEmail" maxlength="113" value="Enter your new email here"
+                                    onfocus="if(value=='Enter your new email here') value = ''" onblur="if(value=='') value = 'Enter your new email here'">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Re-enter New Email
+                        </td>
+                        <td>
+                                <input type="email" id="txtReEnterEmail" name="txtReEnterEmail" maxlength="113" value="Re-enter your new email here"
+                                    onfocus="if(value=='Re-enter your new email here') value = ''" onblur="if(value=='') value = 'Re-enter your new email here'">
+                        </td>
+                    </tr>
+                    <tr align="center">
+                        <td colspan="2" align="center">
+                            <div align="center">
+                                <input type="button" id="btnChangeEmail" name="btnChangeEmail" value="Change Email"
+                                    class="default XLargePaddingRight" onclick="return validateChangeEmailform();" />
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+        </td>
+    </tr>
+</table>

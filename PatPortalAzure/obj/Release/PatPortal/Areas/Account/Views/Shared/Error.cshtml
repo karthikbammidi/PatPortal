@@ -1,0 +1,125 @@
+﻿@{
+    ViewBag.Title = "Error";
+    Layout = null;
+}
+@model System.Web.Mvc.HandleErrorInfo
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <script src="@Url.Content("../../Content/js/jquery-1.7.1.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("../../Content/js/Common.js")" type="text/javascript"></script>
+    <script src="@Url.Content("../../Content/js/jquery.js")" type="text/javascript"></script>
+    <script src="@Url.Content("../../Content/js/splitter.js")" type="text/javascript"></script>
+    <link href="@Url.Content("../../Content/styles/styles.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("../../../../Content/Dashboard.css")" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="MainWrapper">
+        <div class="TopBlue">
+            <div class="Logo">
+                <a href="/Dashboard/PatientPortal/">
+                    <img src="/Content/images/Logo.png" alt="Patient Portal" /></a>
+            </div>
+            <div style="float: left; padding-left: 380px;">
+                <span style="color: White; font-weight: bolder; font-size: 20px; line-height: 36px;" id="ClinicName">Error Page</span>
+            </div>
+            <div class="TopRight" style="width: 320px;">
+                <div class="Settings" style="display:none;">
+                    <a href="#" title="Settings">
+                        <img src="/Content/images/invis.gif" alt="All services" height="8" class="Settings_img" /></a>
+                </div>
+                <div class="UserInfo" style="display:none;">
+                    <a href="#" title="User Info" id="ankUsername">Welcome
+                        <img src="/Content/images/bluemanm.png" alt="UserInfo" height="8" class="UserInfo_img"
+                            style="visibility: hidden" /></a>
+                </div>
+                <div style="padding-top: 8px;display:none">
+                    <a href="/Account/Logout" title="Logout" style="text-decoration: none; color: White; font-weight: bold; padding-top: 12px; padding-bottom: 12px; padding-left: 8px; padding-right: 8px;">Logout</a>
+                </div>
+            </div>
+            <div id="patdetailshome" style="background-color: #0072C6; height: 80px;display:none">
+            </div>
+            <div class="ClearFloat">
+            </div>
+        </div>
+        <!-- Top Blue End -->
+        <!-- Splitter Start -->
+        <div id="MySplitter" style="height: 500px; position: relative;">
+            <!-- Left Splitter Start -->
+            <div class="SplitterPane LeftPane" style="display: none">
+                <div class="ASBaccordion" style="padding-top: 5px;">
+                    <div class="RefreshLink">
+                        <a href="javascript:void(0);" onclick="reloadPage()">Refresh</a>
+                    </div>
+                    <h2 class="AccordionHeader">
+                        <a id="lnkMessaging" href="javascript:void(0);">
+                            <img src="/Content/images/invis.gif" alt="All services" class="OpenCloseRDArrow" />
+                            Messaging</a></h2>
+                    <h2 class="AccordionHeader">
+                        <a id="ankMedications" href="javascript:void(0);">
+                            <img src="/Content/images/invis.gif" alt="All services" class="OpenCloseRDArrow" />
+                            Medications / Refill</a></h2>
+                    <h2 class="AccordionHeader">
+                        <a>
+                            <img src="/Content/images/invis.gif" alt="All services" class="OpenCloseRDArrow" />
+                            Social History</a></h2>
+                    <h2 class="AccordionHeader">
+                        <a>
+                            <img src="/Content/images/invis.gif" alt="All services" class="OpenCloseRDArrow" />
+                            Medical History</a></h2>
+                    <h2 class="AccordionHeader">
+                        <a id="ankChangePassword" href="javascript:void(0);">
+                            <img src="/Content/images/invis.gif" alt="All services" class="OpenCloseRDArrow" />
+                            Change Password</a></h2>
+                    <h2 class="AccordionHeader">
+                        <a id="ankChangeEmail" href="javascript:void(0);">
+                            <img src="/Content/images/invis.gif" alt="All services" class="OpenCloseRDArrow" />
+                            Change Email</a></h2>
+                </div>
+            </div>
+            <!-- Left Splitter End -->
+            <div id="CenterAndRight">
+                <!-- Center Splitter Start -->
+                <div class="SplitterPane CenterPane" style="overflow: hidden">
+                    <h2>Sorry, an error occurred while processing your request.
+                    </h2>
+                    <table>
+                        <tr>
+                            <td><b>Controller:</b></td>
+                            <td>@Model.ControllerName</td>
+                        </tr>
+                        <tr>
+                            <td><b>Action:</b></td>
+                            <td>@Model.ActionName</td>
+                        </tr>
+                        <tr>
+                            <td><b>Exception:</b></td>
+                            <td>@Model.Exception</td>
+                        </tr>
+                    </table>
+                    <div align="left">
+                        <span id="spnerror" style="color: red; font-weight: bold;"></span>
+                    </div>
+                </div>
+                <!-- Center Splitter End -->
+                <!-- Right Splitter Start -->
+                <div class="SplitterPane RightPane">
+                </div>
+                <!-- Right Splitter End -->
+            </div>
+            <!-- #CenterAndRight -->
+        </div>
+        <!-- #MySplitter -->
+        <!-- Splitter End -->
+        <div class="FooterMain FooterMain2">
+            <div class="Copyright Copyright2">
+                ©2012 Patient Portal <a href="@Url.Content("/Account/Terms")">Terms</a> <a href="@Url.Content("/Account/Privacy")">Privacy</a> <a href="@Url.Content("/Account/Help")">Help Center</a> <a href="@Url.Content("/Account/Feedback")">Feedback</a>
+            </div>
+            <div class="ClearFloat">
+            </div>
+        </div>
+    </div>
+</body>
+</html>

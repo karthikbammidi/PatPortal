@@ -1,0 +1,38 @@
+﻿
+        #vertical
+        {
+            height: 380px;
+        }
+        #middle-pane
+        {
+            background-color: rgba(60, 70, 80, 0.10);
+        }
+        #bottom-pane
+        {
+            background-color: rgba(60, 70, 80, 0.15);
+        }
+        #left-pane
+        {
+            background-color: rgba(60, 70, 80, 0.05);
+        }
+        #center-pane
+        {
+            background-color: rgba(60, 70, 80, 0.05);
+        }
+        #right-pane
+        {
+            background-color: rgba(60, 70, 80, 0.05);
+        }
+        .pane-content
+        {
+            padding: 0 10px;
+        }
+        tr.k-state-selected td
+        {
+            color: White;
+        }
+        
+        h2.AccordionHeader a
+        {
+            font-size: 15px;
+        }
